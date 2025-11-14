@@ -1,0 +1,45 @@
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+      - inference
+    environment:
+      JAVA_OPTS: "-Xms512m -Xmx1g"
+      STORAGE_PATH: ${STORAGE_PATH:-/data/videos}
+    volumes:
+      - ./storage:/data/videos
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: ${BACKEND_URL:-http://localhost:8080}
+
+  inference:
+    build: ./inference-service
+    ports:
+      - "8001:8001"
+    environment:
+      MODEL_PATH: /app/models/yolov8n.pt
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+
