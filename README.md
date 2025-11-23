@@ -1,4 +1,4 @@
-Vehicle Detection & Tracking for ITS
+Vehicle Detecting and Tracking For Smart Traffic Management Using OpenCV
 ====================================
 
 This repository contains a production-ready implementation blueprint for a full-stack Intelligent Transportation System (ITS) focused on vehicle detection, tracking, and analytics. The project includes:
